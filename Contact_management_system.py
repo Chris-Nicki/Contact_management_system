@@ -17,19 +17,6 @@ Quit ">
 """
 import re
 contact_data = {}
-# def Contact_management_system():
-#     print("""Welcome to Fred's Rubber Ducky Repair Customer 
-#       Contact Management System! Menu:
-# 1. Add a new contact
-# 2. Edit existing contacts
-# 3. Delete a contact
-# 4. Search contacts
-# 5. Display contacts
-# 6. Export contacts to a text file
-# 7. Import contacts from tex file
-# 8. Quit               
-# """)  
-# Contact_management_system()
 """
 Contact Data Storage:
 Use nested dictionaries as the main data structure for storing contact information.
@@ -74,64 +61,155 @@ def contact_data_storage():
             print("Please enter a valid phone number!")
     # Throw errors for not enough numbers, any alphabetic characters
     address = input("Please enter the contact's mailing address. ").lower()
-    birthday = input("Please enter a birthday for the contact. ").lower()
+    while True:
+        birthday_patter = re.compile(r"\d{2}/\d{2}/\d{4}")
+        birthday = input("Please enter a birthday for the contact. ").lower()
+        valid_birthday = re.match(birthday_patter, birthday) 
+        if valid_birthday:
+            print(f" Birthday is: {valid_birthday.group()}") 
+            break
+        else:
+            print("Please enter valid birthday!")
     notes = input("Notes: ").lower()
     contact_data[email_address] = {"Name": [first_name, last_name], "Phone Number": {phone_number}, "Address": {address}, "Birthday": {birthday}, "Notes": {notes}}
     print(contact_data)
-contact_data_storage()
 
-# def locate_contact(contact_data[email_address]):
-#     print("Lets Locate a contact!")
-#     while True:
-#         email_address = input("Please enter the contact's email address. ").lower()
-#         if email_address in contact_data:
-#             print(contact_data[email_address])
-#         else:
-#             print("Please enter a valid email address!")
-#         break
-# locate_contact(contact_data[email_address])
 
-# def update_contact():
-#     while True:
-#         locate_contact(contact_data["email_address"])
-#         update = input("""What would you like to update? 
-#     1. Email
-#     2. Name
-#     3. Phone Number
-#     4. Address
-#     5. Birthday
-#     6. Notes                                
-#     """).lower()
-#         if update == "1":
-#             new_email_address =input("Please update the email address.").lower()
-#         if update == "2":
-#             new_first_name = input("Please update the first name, ").lower()
-#             new_last_name = input("Please update the last name.").lower()
-#         if update == "3":
-#             new_phone_number = input("Please update the phone number.").lower()
-#         if update == "4":
-#             new_address = input("Please update the  address. ").lower()
-#         if update == "5":
-#             new_birthday = input("Please update the birthday. ").lower()
-#         if update == "6":
-#             new_notes = input("Please update the notes. ")
-#         if update == "7":
-#             break
+def locate_contact():
+    print("Lets Locate a contact!")
+    while True:
+        email_address = input("Please enter the contact's email address. ").lower()
+        if email_address in contact_data:
+            print(contact_data[email_address])
+        else:
+            print("Please enter a valid email address!")
+        break
+
+
+def update_contact():
+    while True:
+        email_address =locate_contact()
+        update = input("""What would you like to update? 
+1. Email
+2. Name
+3. Phone Number
+4. Address
+5. Birthday
+6. Notes 
+7. Quit                               
+""").lower()
+        if update == "1":
+            print("Please update the email address.")
+            email_pattern = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z0-9]{3,}\b")
+            good_email_address = input("Please enter a valid email address. ").lower().strip()
+            email_address = re.match(email_pattern, good_email_address)
+            if email_address:
+                print(f"Valid email: {email_address.group()}")
+                break
+            else:
+                print("Invalid Email Please try again")
+            contact_data[email_address] 
+        elif update == "2":
+            print("Lets update the name")
+            update_first_name = input("What is your first name").lower()
+            update_last_name = input("What is your last name? ").lower()
+            contact_data[email_address]["Name"] = [update_first_name, update_last_name]
+        elif update == "3":
+            print("Please update the phone number.")
+            while True:
+                good_phone_number = input("Please enter a valid phone number") 
+                phone_number = re.search(r"\d{3}-\d{3}-\d{4}", good_phone_number)
+                if phone_number:
+                    print(f"Valid Phone Number: {phone_number.group()}")
+                    break
+                else:
+                    print("Please enter a valid phone number!")
+                contact_data[email_address]["Phone number"] = [phone_number]   
+        elif update == "4":
+            print("Lets update the address.")
+            new_address = input("Please update the  address. ").lower()
+            contact_data[email_address]["Address"] = [new_address]
+        elif update == "5":
+            while True:
+                birthday_patter = re.compile(r"\d{2}/\d{2}/\d{4}")
+                new_birthday = input("Please update the birthday. ").lower()
+                valid_birthday = re.match(birthday_patter, new_birthday) 
+                if valid_birthday:
+                    print(f" Birthday is: {valid_birthday.group()}")
+                    contact_data[email_address]["Birthday"] = [valid_birthday]
+                    break
+                else:
+                    print("Please enter valid birthday!")
+                
+        elif update == "6":
+            new_notes = input("Notes: ")
+            contact_data[email_address]["Notes"] = [new_notes]
+        elif update == "7":
+            break
+        else:
+            print("Please enter a valid response")
 
 # # This is a basic version of what needs to happen, we still need to make it pull and update the called ticket!
 # update_contact()
-# def display_all_contacts():
-#     print(contact_data)
-# display_all_contacts()
+def display_all_contacts():
+    print(contact_data)
 
-# def delete_contact():
-#     locate_contact(contact_data) 
-#     deleted_contact = contact_data.pop(email_address)
-# # need the locate contact to populate a usable email address
-# delete_contact()       
 
-# def export_contact():
-#     with open("contacts.txt", "w")
+def delete_contact():
+    email_address = locate_contact()
+    delete = input("What contact would you like to delete? ")
+    locate_contact(contact_data) 
+    deleted_contact = contact_data.pop(email_address)
+# need the locate contact to populate a usable email address
+     
+
+def export_contact():
+    with open("contacts.txt", "w") as file:
+        for email_address in contact_data.items():
+            file.write(f"{email_address}:\n") 
+# with open("garden_care.txt", "w") as file:
+#     for plant, care in garden_care.items():
+#         file.write(f"{plant}:\n")
+#         for care_type, quantity in care.items():
+#             file.write(f"   {care_type}: {quantity}\n")
+
+
+
+def Contact_management_system():
+    while True:
+         
+        option = input("""Welcome to Fred's Rubber Ducky Repair Customer 
+        Contact Management System! Menu:
+    1. Add a new contact
+    2. Edit existing contacts
+    3. Delete a contact
+    4. Search contacts
+    5. Display contacts
+    6. Export contacts to a text file
+    7. Quit               
+    """)  
+        if option =="1":
+                contact_data_storage()
+                print(contact_data)
+        elif option == "2":
+                update_contact()
+                print(contact_data)
+        elif option == "3":
+                delete_contact()
+                print(contact_data)
+        elif option == "4":
+                locate_contact()
+                print(contact_data)
+        elif option == "5":
+                display_all_contacts()
+
+        elif option == "6":
+                export_contact()
+                print("Contacts exported!")
+        else:
+             print("Please enter a valid response")
+             break
+Contact_management_system()
 
 
 
