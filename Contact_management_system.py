@@ -163,8 +163,7 @@ def delete_contact():
     contact = input("What contact would you like to delete? ").lower()
     if contact in contact_data: 
         contact_data.pop(contact)
-        
-# need the locate contact to populate a usable email address
+    
      
 
 def export_contact():
