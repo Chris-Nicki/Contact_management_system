@@ -114,8 +114,8 @@ def update_contact():
             print("Please update the phone number.")
             good_phone_number = input("Please enter a valid phone number") 
             phone_number = re.search(r"\d{3}-\d{3}-\d{4}", good_phone_number)
-            contact_data[email].update({"Phone": f"{good_phone_number}"})
-            print(f"Valid Phone Number: {phone_number.group()}")
+            contact_data[email].update({"Phone Number": f"{good_phone_number}"})
+            print(f"Phone Number: {phone_number.group()}")
             break
         elif update == "3":
             print("Lets update the address.")
@@ -123,17 +123,17 @@ def update_contact():
             contact_data[email].update({"Address": f"{new_address}"})
             break
         elif update == "4":
-            while True:
-                birthday_patter = re.compile(r"\d{2}/\d{2}/\d{4}")
-                new_birthday = input("Please update the birthday. ").lower()
-                valid_birthday = re.match(birthday_patter, new_birthday) 
-                if valid_birthday:
-                    print(f" Birthday is: {valid_birthday.group()}")
-                    contact_data[email].update({"Birthday": f"{valid_birthday}"})
-                    break
-                else:
-                    print("Please enter valid birthday!")
-                
+        
+            birthday_patter = re.compile(r"\d{2}/\d{2}/\d{4}")
+            new_birthday = input("Please update the birthday. ").lower()
+            valid_birthday = re.match(birthday_patter, new_birthday)
+            if valid_birthday:
+                contact_data[email].update({"Birthday": f"{valid_birthday.group()}"})
+                print(f" Birthday is: {valid_birthday.group()}")
+                break
+            else:
+                print("Please enter valid birthday!")
+            
         elif update == "5":
             new_notes = input("Notes: ")
             contact_data[email].update({"Notes": f"{new_notes}"})
