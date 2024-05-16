@@ -71,7 +71,7 @@ def contact_data_storage():
         else:
             print("Please enter valid birthday!")
     notes = input("Notes: ").lower()
-    contact_data[email_address.group()] = {"Name": [first_name, last_name], "Phone Number": {phone_number.group()}, "Address": {address}, "Birthday": {birthday}, "Notes": {notes}}
+    contact_data[email_address.group()] = {"Name": {first_name, last_name}, "Phone Number": {phone_number.group()}, "Address": {address}, "Birthday": {birthday}, "Notes": {notes}}
     print(contact_data)
 
 def locate_contact():
@@ -80,14 +80,15 @@ def locate_contact():
         email_address = input("Please enter the contact's email address. ").lower()
         if email_address in contact_data:
             print(contact_data[email_address])
-            break
+            return (contact_data[email_address])
+           
         else:
             print("Please enter a valid email address!")
         
 
 def update_contact():
     while True:
-        email_address =locate_contact()
+        email_address = locate_contact()
         update = input("""What would you like to update? 
 1. Email
 2. Name
@@ -102,9 +103,9 @@ def update_contact():
             email_pattern = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z0-9]{3,}\b")
             good_email_address = input("Please enter a valid email address. ").lower().strip()
             new_email_address = re.match(email_pattern, good_email_address)
-            if email_address not in contact_data:
+            if email_address in contact_data:
                 print(f"Valid email: {email_address}")
-                contact_data[new_email_address.group()] 
+                contact_data.update[email_address.group()] = contact_data[new_email_address]  # Modify value for existing key
                 print("Email Updated!")  # Confirmation message
             else:
                 print("Invalid Email Please try again")
@@ -115,7 +116,7 @@ def update_contact():
             print("Lets update the name")
             update_first_name = input("What is your first name").lower()
             update_last_name = input("What is your last name? ").lower()
-            contact_data["Name"] = [update_first_name, update_last_name]
+            contact_data.update({"Name" : {update_first_name, update_last_name}})
             break
         elif update == "3":
             print("Please update the phone number.")
@@ -127,11 +128,11 @@ def update_contact():
                     break
                 else:
                     print("Please enter a valid phone number!")
-            contact_data.update[email_address.group()]["Phone number"] = [phone_number]   
+            contact_data.update[email_address]["Phone number"] = [phone_number]   
         elif update == "4":
             print("Lets update the address.")
             new_address = input("Please update the  address. ").lower()
-            contact_data[email_address.group()]["Address"] = [new_address]
+            contact_data[email_address]["Address"] = [new_address]
         elif update == "5":
             while True:
                 birthday_patter = re.compile(r"\d{2}/\d{2}/\d{4}")
@@ -139,7 +140,7 @@ def update_contact():
                 valid_birthday = re.match(birthday_patter, new_birthday) 
                 if valid_birthday:
                     print(f" Birthday is: {valid_birthday.group()}")
-                    contact_data[email_address.group()]["Birthday"] = [valid_birthday]
+                    contact_data[email_address]["Birthday"] = [valid_birthday]
                     break
                 else:
                     print("Please enter valid birthday!")
@@ -162,6 +163,7 @@ def delete_contact():
     contact = input("What contact would you like to delete? ").lower()
     if contact in contact_data: 
         contact_data.pop(contact)
+        
 # need the locate contact to populate a usable email address
      
 
@@ -169,7 +171,7 @@ def export_contact():
     with open("contacts.txt", "w") as file:
         for email_address in contact_data.items():
             file.write(f"{email_address}:\n") 
-
+        
 
 
 
