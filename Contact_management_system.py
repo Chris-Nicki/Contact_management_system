@@ -15,8 +15,7 @@ Export contacts to a text file
 Import contacts from a text file *BONUS
 Quit "> 
 """
-import re
-contact_data = {}
+
 """
 Contact Data Storage:
 Use nested dictionaries as the main data structure for storing contact information.
@@ -35,6 +34,8 @@ Editing an existing contact's information (name, phone number, email, etc.).
 Deleting a contact by searching for their unique identifier.
 Searching for a contact by their unique identifier and displaying their details.
 Displaying a list of all contacts with their unique identifiers."""
+import re
+contact_data = {}
 
 def contact_data_storage():
     print("Lets Add a New Contact")
@@ -48,7 +49,7 @@ def contact_data_storage():
         else:
             print("Invalid Email Please try again")
         
-    print("Please enter a first and last name. ") # Needs to only take alphabetic characters no numbers
+    print("Please enter a first and last name. ") 
     first_name = input("What is the first name? ").lower()
     last_name =input("What is the last name? ").lower()
     while True:
@@ -59,7 +60,6 @@ def contact_data_storage():
             break
         else:
             print("Please enter a valid phone number!")
-    # Throw errors for not enough numbers, any alphabetic characters
     address = input("Please enter the contact's mailing address. ").lower()
     while True:
         birthday_patter = re.compile(r"\d{2}/\d{2}/\d{4}")
@@ -71,9 +71,8 @@ def contact_data_storage():
         else:
             print("Please enter valid birthday!")
     notes = input("Notes: ").lower()
-    contact_data[email_address] = {"Name": [first_name, last_name], "Phone Number": {phone_number}, "Address": {address}, "Birthday": {birthday}, "Notes": {notes}}
+    contact_data[email_address.group()] = {"Name": [first_name, last_name], "Phone Number": {phone_number.group()}, "Address": {address}, "Birthday": {birthday}, "Notes": {notes}}
     print(contact_data)
-
 
 def locate_contact():
     print("Lets Locate a contact!")
@@ -81,10 +80,10 @@ def locate_contact():
         email_address = input("Please enter the contact's email address. ").lower()
         if email_address in contact_data:
             print(contact_data[email_address])
+            break
         else:
             print("Please enter a valid email address!")
-        break
-
+        
 
 def update_contact():
     while True:
@@ -102,18 +101,22 @@ def update_contact():
             print("Please update the email address.")
             email_pattern = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z0-9]{3,}\b")
             good_email_address = input("Please enter a valid email address. ").lower().strip()
-            email_address = re.match(email_pattern, good_email_address)
-            if email_address:
-                print(f"Valid email: {email_address.group()}")
-                break
+            new_email_address = re.match(email_pattern, good_email_address)
+            if email_address not in contact_data:
+                print(f"Valid email: {email_address}")
+                contact_data[new_email_address.group()] 
+                print("Email Updated!")  # Confirmation message
             else:
                 print("Invalid Email Please try again")
-            contact_data[email_address] 
+ 
+
+             
         elif update == "2":
             print("Lets update the name")
             update_first_name = input("What is your first name").lower()
             update_last_name = input("What is your last name? ").lower()
-            contact_data[email_address]["Name"] = [update_first_name, update_last_name]
+            contact_data["Name"] = [update_first_name, update_last_name]
+            break
         elif update == "3":
             print("Please update the phone number.")
             while True:
@@ -124,11 +127,11 @@ def update_contact():
                     break
                 else:
                     print("Please enter a valid phone number!")
-                contact_data[email_address]["Phone number"] = [phone_number]   
+            contact_data.update[email_address.group()]["Phone number"] = [phone_number]   
         elif update == "4":
             print("Lets update the address.")
             new_address = input("Please update the  address. ").lower()
-            contact_data[email_address]["Address"] = [new_address]
+            contact_data[email_address.group()]["Address"] = [new_address]
         elif update == "5":
             while True:
                 birthday_patter = re.compile(r"\d{2}/\d{2}/\d{4}")
@@ -136,14 +139,14 @@ def update_contact():
                 valid_birthday = re.match(birthday_patter, new_birthday) 
                 if valid_birthday:
                     print(f" Birthday is: {valid_birthday.group()}")
-                    contact_data[email_address]["Birthday"] = [valid_birthday]
+                    contact_data[email_address.group()]["Birthday"] = [valid_birthday]
                     break
                 else:
                     print("Please enter valid birthday!")
                 
         elif update == "6":
             new_notes = input("Notes: ")
-            contact_data[email_address]["Notes"] = [new_notes]
+            contact_data[email_address.group()]["Notes"] = [new_notes]
         elif update == "7":
             break
         else:
@@ -156,10 +159,9 @@ def display_all_contacts():
 
 
 def delete_contact():
-    email_address = locate_contact()
-    delete = input("What contact would you like to delete? ")
-    locate_contact(contact_data) 
-    deleted_contact = contact_data.pop(email_address)
+    contact = input("What contact would you like to delete? ").lower()
+    if contact in contact_data: 
+        contact_data.pop(contact)
 # need the locate contact to populate a usable email address
      
 
@@ -167,11 +169,7 @@ def export_contact():
     with open("contacts.txt", "w") as file:
         for email_address in contact_data.items():
             file.write(f"{email_address}:\n") 
-# with open("garden_care.txt", "w") as file:
-#     for plant, care in garden_care.items():
-#         file.write(f"{plant}:\n")
-#         for care_type, quantity in care.items():
-#             file.write(f"   {care_type}: {quantity}\n")
+
 
 
 
@@ -190,7 +188,6 @@ def Contact_management_system():
     """)  
         if option =="1":
                 contact_data_storage()
-                print(contact_data)
         elif option == "2":
                 update_contact()
                 print(contact_data)
@@ -199,16 +196,16 @@ def Contact_management_system():
                 print(contact_data)
         elif option == "4":
                 locate_contact()
-                print(contact_data)
         elif option == "5":
                 display_all_contacts()
-
         elif option == "6":
                 export_contact()
                 print("Contacts exported!")
+        elif option == "7":
+             break
         else:
              print("Please enter a valid response")
-             break
+             
 Contact_management_system()
 
 
